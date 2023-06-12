@@ -1,13 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './index.css';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import EditBarang from './components/EditBarang';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <Routes>
+        {/* routing */}
+        <Route exact path="/" element={<App />} />
+        <Route path="/edit/:id" element={<EditBarang />} />
+        {/*  */}
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>
 );
 
