@@ -81,6 +81,7 @@ function App(props) {
       const file = e.target.elements['foto-barang'].files[0];
       const allowedTypes = ['image/png', 'image/jpeg'];
       const maxSize = 100 * 1024; // 100 KB
+      if (file.type !== allowedTypes && file.size > maxSize) return alert('file gambar hanya boleh jpeg dan png dengan maxSize 100kb !');
 
       if (file && allowedTypes.includes(file.type) && file.size <= maxSize) {
         const urlBlob = await readFileAsDataURL(file); // Membaca file sebagai URL Blob gambar
@@ -207,10 +208,12 @@ function App(props) {
                     <td>{data.hargaBeli}</td>
                     <td>{data.stock}</td>
                     <td>
-                      <button className="btn btn-warning me-1">
-                        <Link to={`/edit/${data.id}`}>Edit</Link>
+                      <button className="btn btn-primary  me-1">
+                        <Link className="text-white" to={`/edit/${data.id}`}>
+                          Edit
+                        </Link>
                       </button>
-                      <button className="btn btn-danger  " onClick={() => handleDeleteBarang(data.id)}>
+                      <button className="btn btn-primary text-white text-decoration-underline " onClick={() => handleDeleteBarang(data.id)}>
                         Hapus
                       </button>
                     </td>

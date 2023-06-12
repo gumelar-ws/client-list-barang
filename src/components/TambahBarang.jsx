@@ -48,9 +48,9 @@ export const TambahBarang = ({ handelSubmit, saveData, handleFile, handelChange,
           </div>
         </div>
         {/* ======= */}
-        <button type="submit" className="btn btn-success">
+        <button type="submit" className="btn btn-primary">
           {' '}
-          Save
+          Simpan
         </button>
       </form>
     </div>

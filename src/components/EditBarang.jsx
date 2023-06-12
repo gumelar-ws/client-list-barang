@@ -132,46 +132,12 @@ function EditBarang() {
           </div>
         </div>
         {/* ======= */}
-        <button type="submit" className="btn btn-success">
+        <button type="submit" className="btn btn-primary">
           {' '}
           Simpan Perubahan
         </button>
       </form>
       {/* =============== */}
-      {/* <form >
-        <div>
-          <label>
-            Nama Barang:
-            <input type="text" value={namaBarang}  />
-          </label>
-        </div>
-        <div>
-          <label>
-            Harga Jual:
-            <input type="number"  />
-          </label>
-        </div>
-        <div>
-          <label>
-            Harga Beli:
-            <input type="number" />
-          </label>
-        </div>
-        <div>
-          <label>
-            Stock:
-            <input type="number"  />
-          </label>
-        </div>
-        <div>
-          <label>
-            Foto Barang:
-            <input type="file"  />
-          </label>
-        </div>
-       
-        <button type="submit">Simpan Perubahan</button>
-      </form> */}
     </div>
   );
 }
