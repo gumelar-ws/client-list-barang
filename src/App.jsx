@@ -4,7 +4,8 @@ import { TambahBarang } from './components/TambahBarang';
 import { uid } from 'uid';
 import './App.css';
 import { Link } from 'react-router-dom';
-const url = 'https://list-barang.cyclic.app/data';
+// const url = 'https://list-barang.cyclic.app/data';
+const url = 'http://localhost:5000/data';
 
 function App(props) {
   const [barang, setBarang] = useState([]);
@@ -75,23 +76,16 @@ function App(props) {
     }
   };
   const handelSubmit = async (e) => {
-    e.preventDefault();
-    const file = e.target.elements['foto-barang'].files[0];
-    const allowedTypes = ['image/png', 'image/jpeg'];
-    const maxSize = 100 * 1024; // 100 KB
-    if (file.type !== allowedTypes && file.size > maxSize) {
-      alert('file gambar harus jpg/png dan max 100kb');
-      return;
-    }
-    if (file && allowedTypes.includes(file.type) && file.size <= maxSize) {
-      const reader = new FileReader();
-      reader.onload = async () => {
-        const urlBlob = reader.result; // URL Blob gambar
+    try {
+      e.preventDefault();
+      const file = e.target.elements['foto-barang'].files[0];
+      const allowedTypes = ['image/png', 'image/jpeg'];
+      const maxSize = 100 * 1024; // 100 KB
 
-        // Cek apakah nama barang sudah ada di listBarang
+      if (file && allowedTypes.includes(file.type) && file.size <= maxSize) {
+        const urlBlob = await readFileAsDataURL(file); // Membaca file sebagai URL Blob gambar
+
         const isDuplicateName = barang.some((barang) => barang.namaBarang === saveData.namaBarang);
-
-        // Cek apakah URL gambar sudah ada di listBarang
         const isDuplicateImageUrl = barang.some((barang) => barang.fotoBarang === urlBlob);
 
         if (isDuplicateName) {
@@ -99,39 +93,53 @@ function App(props) {
         } else if (isDuplicateImageUrl) {
           alert('Gambar sudah ada, harap pilih gambar lain');
         } else {
-          try {
-            const data = {
-              id: uid(),
-              fotoBarang: urlBlob,
-              namaBarang: saveData.namaBarang,
-              hargaJual: saveData.hargaJual,
-              hargaBeli: saveData.hargaBeli,
-              stock: saveData.stock,
-            };
+          const data = {
+            id: uid(),
+            fotoBarang: urlBlob,
+            namaBarang: saveData.namaBarang,
+            hargaJual: saveData.hargaJual,
+            hargaBeli: saveData.hargaBeli,
+            stock: saveData.stock,
+          };
 
-            const response = await fetch(url, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(data),
-            });
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+          });
 
-            if (response.ok) {
-              setSaveData({ namaBarang: '', hargaJual: 0, hargaBeli: 0, stock: 0 });
-              setImageUrl('');
-            } else {
-              throw new Error('Gagal mengirimkan data ke server');
-            }
-          } catch (error) {
-            console.error(error);
+          if (response.ok) {
+            setSaveData({ namaBarang: '', hargaJual: 0, hargaBeli: 0, stock: 0 });
+            setImageUrl('');
+          } else {
+            throw new Error('Gagal mengirimkan data ke server');
           }
         }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Fungsi untuk membaca file sebagai URL Blob secara asinkron
+  const readFileAsDataURL = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+
+      reader.onerror = (error) => {
+        reject(error);
       };
 
       reader.readAsDataURL(file);
-    }
+    });
   };
+
   // pagination
 
   const indexOfLastItem = currentPage * itemsPerPage;
