@@ -4,8 +4,8 @@ import { TambahBarang } from './components/TambahBarang';
 import { uid } from 'uid';
 import './App.css';
 import { Link } from 'react-router-dom';
-// const url = 'https://list-barang.cyclic.app/data';
-const url = 'http://localhost:5000/data';
+const url = 'https://list-barang.cyclic.app/data';
+// const url = 'http://localhost:5000/data';
 
 function App(props) {
   const [barang, setBarang] = useState([]);
