@@ -109,17 +109,20 @@ function App(props) {
               stock: saveData.stock,
             };
 
-            await fetch(url, {
+            const response = await fetch(url, {
               method: 'POST',
-              mode: 'cors',
               headers: {
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify(data),
             });
-            await fetchBarang();
-            setSaveData({ namaBarang: '', hargaJual: 0, hargaBeli: 0, stock: 0 });
-            setImageUrl('');
+
+            if (response.ok) {
+              setSaveData({ namaBarang: '', hargaJual: 0, hargaBeli: 0, stock: 0 });
+              setImageUrl('');
+            } else {
+              throw new Error('Gagal mengirimkan data ke server');
+            }
           } catch (error) {
             console.error(error);
           }
