@@ -4,7 +4,7 @@ import { TambahBarang } from './components/TambahBarang';
 import { uid } from 'uid';
 import './App.css';
 import { Link } from 'react-router-dom';
-const url = 'https://list-barang.cyclic.app/data';
+const url = 'https://server-json-delta.vercel.app/data';
 // const url = 'http://localhost:5000/data';
 
 function App(props) {
@@ -93,6 +93,7 @@ function App(props) {
         } else if (isDuplicateImageUrl) {
           alert('Gambar sudah ada, harap pilih gambar lain');
         } else {
+          console.log(urlBlob);
           const data = {
             id: uid(),
             fotoBarang: urlBlob,
@@ -102,7 +103,7 @@ function App(props) {
             stock: saveData.stock,
           };
 
-          const response = await fetch(url, {
+          await fetch(url, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -110,12 +111,9 @@ function App(props) {
             body: JSON.stringify(data),
           });
 
-          if (response.ok) {
-            setSaveData({ namaBarang: '', hargaJual: 0, hargaBeli: 0, stock: 0 });
-            setImageUrl('');
-          } else {
-            throw new Error('Gagal mengirimkan data ke server');
-          }
+          setSaveData({ namaBarang: '', hargaJual: 0, hargaBeli: 0, stock: 0 });
+          setImageUrl('');
+          window.location.reload();
         }
       }
     } catch (error) {
@@ -152,12 +150,13 @@ function App(props) {
   // delet barang
   const handleDeleteBarang = async (id) => {
     try {
-      window.confirm('apakah anda yakin akan menghapus data ini ?');
-      // Kirim permintaan DELETE ke API dengan ID barang yang akan dihapus
-      await fetch(`${url}/${id}`, {
-        method: 'DELETE',
-      });
-      await fetchBarang();
+      if (window.confirm('apakah anda yakin akan menghapus data ini ?')) {
+        // Kirim permintaan DELETE ke API dengan ID barang yang akan dihapus
+        await fetch(`${url}/${id}`, {
+          method: 'DELETE',
+        });
+        await fetchBarang();
+      }
     } catch (error) {
       console.error('Terjadi kesalahan:', error);
     }
