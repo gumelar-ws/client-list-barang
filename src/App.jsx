@@ -79,7 +79,7 @@ function App(props) {
     try {
       e.preventDefault();
       const file = e.target.elements['foto-barang'].files[0];
-      const allowedTypes = ['image/png', 'image/jpeg'];
+      const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
       const maxSize = 100 * 1024; // 100 KB
       if (file.type !== allowedTypes && file.size > maxSize) return alert('file gambar hanya boleh jpeg dan png dengan maxSize 100kb !');
 
@@ -163,7 +163,6 @@ function App(props) {
     }
   };
 
-  console.log(barang);
   return (
     <div>
       <div className="container ">
